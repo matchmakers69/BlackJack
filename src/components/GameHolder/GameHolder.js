@@ -13,6 +13,7 @@ import PlayerFundsInput from '../../components/PlayerFundsInput';
 import CallToActionsButtonsContainer from '../../components/CallToActionsButtonsContainer';
 import GameContent from '../../components/GameContent';
 import WinnersStatusBar from '../../components/WinnersStatusBar';
+import { drawRandomCard } from './service/handlers';
 
 const GameHolder = ({ history }) => {
   const componentIsMounted = useRef(true);
@@ -112,22 +113,23 @@ const GameHolder = ({ history }) => {
     if (playerPoints > 21 && dealerPoints <= 21) {
       setGameInfoMessage('You lost! Your wife will kill you!');
       setWinnersStatus(true);
-      setTimeout(() => {
-        history.push('/');
-      }, 800);
+      //   setTimeout(() => {
+      //     history.push('/');
+      //   }, 9000);
+    } else if (playerPoints === 21) {
+      setGameInfoMessage('You win! Your wife will love you!');
+      setWinnersStatus(true);
+      //   setTimeout(() => {
+      //     history.push('/');
+      //   }, 9000);
     }
   };
 
-  const getRandomCard = (deck) => {
-    const updatedDeck = deck;
-    const randomIndex = Math.floor(Math.random() * updatedDeck.length);
-    const randomCard = updatedDeck[randomIndex];
-    updatedDeck.splice(randomIndex, 1);
-    return { randomCard, updatedDeck };
-  };
+  const getRandomCard = drawRandomCard(deck);
 
   const dealerDraw = (dealerCards, deck) => {
-    const { randomCard, updatedDeck } = getRandomCard(deck);
+    const { randomCard, updatedDeck } = getRandomCard;
+    console.log(getRandomCard);
     dealerCards.push(randomCard);
     countPointsByCardType(dealerCards);
     return { dealerCards, updatedDeck };
@@ -157,15 +159,15 @@ const GameHolder = ({ history }) => {
     ) {
       setGameInfoMessage('Dealer lost! Your wife will love you!');
       setWinnersStatus(true);
-      setTimeout(() => {
-        history.push('/');
-      }, 800);
+      //   setTimeout(() => {
+      //     history.push('/');
+      //   }, 9000);
     } else {
       setGameInfoMessage('Dealer wins! Your wife will kill you!');
       setWinnersStatus(true);
-      setTimeout(() => {
-        history.push('/');
-      }, 800);
+      //   setTimeout(() => {
+      //     history.push('/');
+      //   }, 9000);
     }
   };
 
