@@ -38,12 +38,25 @@ export const countPointsByCardType = (cards) => {
 
   return rearrangedCardsForDeal.reduce((sum, card) => {
     if (card.reversed) return sum;
-    if (card.face === 'Jack' || card.face === 'Queen' || card.face === 'King') {
-      return sum + 10;
-    } else if (card.face === 'Ace') {
-      return sum + 11 <= 21 ? sum + 11 : sum + 1;
-    } else {
-      return sum + card.face;
+    if (card) {
+      if (
+        card.face === 'Jack' ||
+        card.face === 'Queen' ||
+        card.face === 'King'
+      ) {
+        return sum + 10;
+      } else if (card.face === 'Ace') {
+        return sum + 11 <= 21 ? sum + 11 : sum + 1;
+      } else {
+        return sum + card.face;
+      }
     }
   }, 0);
+};
+
+export const getPlayersPointsBeforeTheGame = (playerCards) => {
+  let playerPoints = 0;
+
+  playerPoints = countPointsByCardType(playerCards);
+  return playerPoints;
 };
