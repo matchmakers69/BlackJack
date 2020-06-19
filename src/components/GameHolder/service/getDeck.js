@@ -51,6 +51,7 @@ export const countPointsByCardType = (cards) => {
         return sum + card.face;
       }
     }
+    return true;
   }, 0);
 };
 
@@ -59,4 +60,11 @@ export const getPlayersPointsBeforeTheGame = (playerCards) => {
 
   playerPoints = countPointsByCardType(playerCards);
   return playerPoints;
+};
+
+export const getDealersPointsBeforeTheGame = (dealerCards) => {
+  let dealerPoints = 0;
+
+  dealerPoints = countPointsByCardType(dealerCards);
+  return dealerPoints;
 };

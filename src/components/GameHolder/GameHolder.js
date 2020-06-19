@@ -6,6 +6,8 @@ import {
   createDeck,
   shuffleCardsRandomly,
   countPointsByCardType,
+  getPlayersPointsBeforeTheGame,
+  getDealersPointsBeforeTheGame,
 } from './service/getDeck';
 import GameContext from '../../GameContext';
 import PlayerFunds from '../../components/PlayerFunds';
@@ -14,6 +16,7 @@ import CallToActionsButtonsContainer from '../../components/CallToActionsButtons
 import GameContent from '../../components/GameContent';
 import WinnersStatusBar from '../../components/WinnersStatusBar';
 import { drawRandomCard } from './service/helpers';
+import constants from '../../constants';
 
 const GameHolder = ({ history }) => {
   const componentIsMounted = useRef(true);
@@ -47,13 +50,26 @@ const GameHolder = ({ history }) => {
         if (deck.length > 0) {
           shuffleDeck(deck);
         }
+      } else {
+        const playerPoints = getPlayersPointsBeforeTheGame(playerCards);
+        const dealerPoints = getDealersPointsBeforeTheGame(dealerCards);
+        if (playerPoints === 21) {
+          setGameInfoMessage(constants.PLAYER_WINS);
+          setWinnersStatus(true);
+        } else if (playerPoints === 21 && dealerPoints === 21) {
+          setGameInfoMessage(constants.NO_ONE_WINS);
+          setWinnersStatus(true);
+        } else if (dealerPoints === 21) {
+          setGameInfoMessage(constants.DEALER_WINS);
+          setWinnersStatus(true);
+        }
       }
     };
     startNewGame();
     return () => {
       componentIsMounted.current = false;
     };
-  }, [deck, funds]);
+  }, [dealerCards, deck, funds, playerCards]);
 
   const handleBetValueInputChange = (e) => {
     const target = e.target;
@@ -67,7 +83,7 @@ const GameHolder = ({ history }) => {
       }));
       setAlertMessage('');
     } else {
-      setAlertMessage('Your bet must be only a number!');
+      setAlertMessage(constants.ONLY_NUMBERS);
     }
   };
 
@@ -75,7 +91,7 @@ const GameHolder = ({ history }) => {
     const { value } = betValue;
     const currentBet = value;
     if (currentBet > funds) {
-      setAlertMessage('Sorry pal, you do not have enough funds!');
+      setAlertMessage(constants.NO_FUNDS);
     } else {
       setFunds(funds - currentBet);
       setBetValue({ value: '' });
@@ -111,10 +127,10 @@ const GameHolder = ({ history }) => {
     setPlayer(updatedPlayerArray);
 
     if (playerPoints > 21 && dealerPoints <= 21) {
-      setGameInfoMessage('You lost! Your wife will kill you!');
+      setGameInfoMessage(constants.PLAYER_LOST);
       setWinnersStatus(true);
     } else if (playerPoints === 21) {
-      setGameInfoMessage('You win! Your wife will love you!');
+      setGameInfoMessage(constants.PLAYER_WINS);
       setWinnersStatus(true);
     }
   };
@@ -148,10 +164,10 @@ const GameHolder = ({ history }) => {
       (playerPoints <= 21 && playerPoints > dealerPoints) ||
       (dealerPoints > 21 && playerPoints <= 21)
     ) {
-      setGameInfoMessage('Dealer lost! Your wife will love you!');
+      setGameInfoMessage(constants.DEALER_LOST);
       setWinnersStatus(true);
     } else {
-      setGameInfoMessage('Dealer wins! Your wife will kill you!');
+      setGameInfoMessage(constants.DEALER_WINS);
       setWinnersStatus(true);
     }
   };
