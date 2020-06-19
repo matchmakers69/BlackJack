@@ -9,7 +9,9 @@ const WinnersStatusBar = () => {
     <Col xs={12}>
       <WinnersBar>
         <p className='status-message'>{gameInfoMessage}</p>
-        <button onClick={resetGame}>Reset</button>
+        <button className='cta-button' onClick={resetGame}>
+          <span>Start new game</span>
+        </button>
       </WinnersBar>
     </Col>
   );
