@@ -117,13 +117,10 @@ const GameHolder = ({ history }) => {
   const handleHit = () => {
     const deckCopy = [...deck];
     const updatedPlayerArray = [...playerCards, deckCopy.pop()];
-
-    let hand = playerCards;
-
     const playerPoints = countPointsByCardType(updatedPlayerArray);
     const dealerPoints = countPointsByCardType(dealerCards);
 
-    setDeck(hand);
+    setDeck(deckCopy);
     setPlayer(updatedPlayerArray);
 
     if (playerPoints > 21 && dealerPoints <= 21) {
